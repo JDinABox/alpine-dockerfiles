@@ -8,7 +8,7 @@ import (
 func main() {
 	ai := await.NewInterrupt()
 
-	wireguard.Wireguard(ai)
+	go wireguard.Wireguard(ai)
 
 	ai.Wait()
 }
