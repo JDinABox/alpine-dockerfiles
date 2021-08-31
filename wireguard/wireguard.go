@@ -1,12 +1,13 @@
 package wireguard
 
 import (
-	"log"
 	"os"
 	"os/exec"
 	"strings"
 
+	"github.com/allocamelus/allocamelus/pkg/logger"
 	await "github.com/jdinabox/go-await"
+	"k8s.io/klog/v2"
 )
 
 const (
@@ -53,8 +54,6 @@ func (w *WgConf) Normalize() {
 }
 
 func Wireguard(ai *await.Interrupt) {
-	// Add 1 to wait group
-	ai.Add(1)
 	defer ai.Done()
 
 	w := newWgConf()
@@ -70,14 +69,13 @@ func Wireguard(ai *await.Interrupt) {
 	}
 
 	// Start wireguard
-	if err := exec.Command("wg-quick", "up", w.ConfPath).Run(); err != nil {
-		panic(err.Error())
-	}
+	klog.Info("Starting wireguard")
+	logger.Fatal(exec.Command("wg-quick", "up", w.ConfPath).Run())
 
 	// Wait for system interrupt
 	ai.Await()
 
 	// Stop wireguard
-	log.Println("Shutting down")
-	log.Println(exec.Command("wg-quick", "down", w.ConfPath).Run().Error())
+	klog.Info("Stopping wireguard")
+	logger.Error(exec.Command("wg-quick", "down", w.ConfPath).Run())
 }
