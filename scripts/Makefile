@@ -14,3 +14,16 @@ gen-wireguard:
 	go run ./gen-makefile/main.go \
 		-n="alpine-wireguard" \
 		-r=$(wg_dir)
+
+# nfs server dir
+nfs_server_dir := $(root_dir)/nfs-server/
+
+gen-nfs-server:
+	go run ./gen-dockerfile/main.go \
+		-m=github.com/jdinabox/alpine-dockerfiles/nfs-server \
+		-r=$(nfs_server_dir) \
+		-w=data/nfs \
+		-a="wireguard-tools nfs-utils"
+	go run ./gen-makefile/main.go \
+		-n="alpine-nfs-server" \
+		-r=$(nfs_server_dir)
