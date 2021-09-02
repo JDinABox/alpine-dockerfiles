@@ -1,6 +1,9 @@
 package main
 
 import (
+	"os"
+	"strconv"
+
 	"github.com/allocamelus/allocamelus/pkg/logger"
 	"github.com/jdinabox/alpine-dockerfiles/wireguard"
 	await "github.com/jdinabox/go-await"
@@ -8,7 +11,8 @@ import (
 )
 
 func main() {
-	logger.InitKlog(5, "")
+	logV, _ := strconv.ParseInt(os.Getenv("LOG_V"), 10, 8)
+	logger.InitKlog(int8(logV), "")
 	ai := await.NewInterrupt()
 
 	// Add 1 to wait group
