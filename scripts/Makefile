@@ -2,6 +2,8 @@ mkfile_path := $(abspath $(lastword $(MAKEFILE_LIST)))
 mkfile_dir := $(dir $(mkfile_path))
 root_dir :=  $(realpath $(mkfile_dir)../)
 
+gen_all: gen-wireguard gen-nfs-server
+
 # wireguard client/server dir
 wg_dir := $(root_dir)/wireguard/
 

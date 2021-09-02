@@ -3,8 +3,9 @@ RUN apk --no-cache -U upgrade && \
     apk --no-cache add --upgrade make build-base
 # WORKDIR /go/src/{{codeModule}}
 WORKDIR /go/src/{{codeModule}}
-COPY . .
-RUN go get -d -v ./...
+COPY go.* ./
+RUN go mod download
+COPY ./ ./
 RUN make build
 
 # Wireguard server/client

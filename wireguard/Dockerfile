@@ -5,8 +5,9 @@ RUN apk --no-cache -U upgrade && \
     apk --no-cache add --upgrade make build-base
 # WORKDIR /go/src/github.com/jdinabox/alpine-dockerfiles/wireguard
 WORKDIR /go/src/github.com/jdinabox/alpine-dockerfiles/wireguard
-COPY . .
-RUN go get -d -v ./...
+COPY go.* ./
+RUN go mod download
+COPY ./ ./
 RUN make build
 
 # Wireguard server/client
