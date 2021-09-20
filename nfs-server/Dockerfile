@@ -10,7 +10,7 @@ RUN go mod download
 COPY ./ ./
 RUN make build
 
-# Wireguard server/client
+# Docker build
 FROM alpine:latest
 
 RUN apk --no-cache -U upgrade
