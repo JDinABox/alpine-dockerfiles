@@ -1,13 +1,13 @@
 FROM golang:alpine AS builder
 RUN apk --no-cache -U upgrade && \
     apk --no-cache add --upgrade make build-base
-# WORKDIR /go/src/{{codeModule}}
-WORKDIR /go/src/{{codeModule}}
+# WORKDIR /go/src/{{coreModule}}
+WORKDIR /go/src/{{coreModule}}
 COPY go.* ./
 RUN go mod download
 COPY ./ ./
 # Go build cache
-RUN --mount=type=cache,target=/root/.cache/go-build make build
+RUN --mount=type=cache,target=/root/.cache/go-build make -C {{codeModule}} build
 
 # Docker build
 FROM alpine:latest
@@ -18,8 +18,8 @@ RUN apk --no-cache -U upgrade \
     && chmod +x /bin/dumb-init
 RUN apk --no-cache add --upgrade {{apk-add}}
 
-# COPY --from=builder /go/src/{{codeModule}}/cmd/app.so /bin/app.so
-COPY --from=builder /go/src/{{codeModule}}/cmd/app.so /bin/app.so
+# COPY --from=builder /go/src/{{coreModule}}/{{codeModule}}/cmd/app.so /bin/app.so
+COPY --from=builder /go/src/{{coreModule}}/{{codeModule}}/cmd/app.so /bin/app.so
 # WORKDIR /{{workDir}}/
 WORKDIR /{{workDir}}/
 
