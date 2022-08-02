@@ -13,7 +13,7 @@ import (
 
 func main() {
 	logV, _ := strconv.ParseInt(os.Getenv("LOG_V"), 10, 8)
-	logger.InitKlog(int8(logV), "")
+	logger.InitKlog(int8(logV), false, "")
 	ai := await.NewInterrupt()
 
 	// Add 1 to wait group

@@ -70,7 +70,11 @@ func Wireguard(ai *await.Interrupt) {
 
 	// Start wireguard
 	klog.Info("Starting wireguard")
-	logger.Fatal(exec.Command("wg-quick", "up", w.ConfPath).Run())
+	output, err := exec.Command("wg-quick", "up", w.ConfPath).CombinedOutput()
+	if klog.V(3).Enabled() {
+		klog.Info(string(output))
+	}
+	logger.Fatal(err)
 
 	// Wait for system interrupt
 	ai.Await()
